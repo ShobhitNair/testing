@@ -30,11 +30,14 @@ const upload = multer({
     storage: storage
 })
 
-app.post('/upload',upload.single('file'),(req,res)=>{
-        UserModel.create({image: req.file.filename})
+app.post('/upload', upload.single('file'), (req, res) => {
+    UserModel.create({ image: req.file.filename })
         .then(result => res.json(result))
-        .catch(err => console.log(err))
-})
+        .catch(err => {
+            console.error("Error saving to database:", err);
+            res.status(500).json({ error: "Error saving to database" });
+        });
+});
 
 
 
