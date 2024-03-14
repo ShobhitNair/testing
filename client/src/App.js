@@ -10,16 +10,13 @@ function App() {
     const formdata = new FormData();
     formdata.append("file", file);
   
-    axios.post(`${window.location.origin}/upload`, formdata)
-      .then(() => {
-        return axios.get(`${window.location.origin}/getImage`);
-      })
-      .then((response) => {
-        setImages(response.data.map((item) => item.image));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      await axios.post(`${window.location.origin}/upload`, formData);
+      const response = await axios.get(`${window.location.origin}/getImage`);
+      setImages(response.data.map((item) => item.image));
+    } catch (error) {
+      console.log("Error uploading file:", error);
+    }
   };
   
   useEffect(() => {
